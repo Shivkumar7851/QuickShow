@@ -13,6 +13,7 @@ export const stripeWebhooks = async (request, response)=>{
         console.error('Webhook signature verification failed:', error.message);
 
         return response.status(400).send(`Webhook Error: ${error.message}`);
+
     }
     try {
         switch (event.type) {
@@ -23,6 +24,7 @@ export const stripeWebhooks = async (request, response)=>{
                 console.log('Checkout session completed:', session.id);
 
                 const bookingId = session.metadata?.bookingId;
+                console.log("bookingId from metadata:", bookingId);
                 if(!bookingId){
                     console.error('No bookingId found in session metadata');
                     break;
