@@ -31,7 +31,9 @@ const MyBookings = () => {
   }
 
   useEffect(()=>{
+    
     if(user){
+      
       getMyBookings()
     }
   },[user]) 

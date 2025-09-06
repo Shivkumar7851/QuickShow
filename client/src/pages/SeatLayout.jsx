@@ -90,6 +90,7 @@ const SeatLayout = () => {
         return toast.error('Please select a time and seats');
       }
       const {data} = await axios.post('/api/booking/create', {showId: selectedTime.showId, selectedSeats}, {headers: {Authorization: `Bearer ${await getToken()}`}});
+      
       if(data.success){
         window.location.href = data.url;
       }

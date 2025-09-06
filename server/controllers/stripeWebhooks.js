@@ -18,7 +18,7 @@ export const stripeWebhooks = async (request, response)=>{
     }
     try {
         switch (event.type) {
-            case "payment_intent.successed ":{
+            case "payment_intent.succeeded":{
                 
                 const paymentIntent = event.data.object;
                 const sessionList = await stripeInstance.checkout.sessions.list({
@@ -31,7 +31,7 @@ export const stripeWebhooks = async (request, response)=>{
                     isPaid: true,
                     paymentLink: ""
                 })
-                break;
+                
 
                 //Send Confirmation Email
 
@@ -39,6 +39,8 @@ export const stripeWebhooks = async (request, response)=>{
                     name: "app/show.booked",
                     data: {bookingId}
                 })
+                
+                break;
 
                 
 
