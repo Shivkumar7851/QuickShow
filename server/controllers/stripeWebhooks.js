@@ -18,30 +18,20 @@ export const stripeWebhooks = async (request, response)=>{
     }
     try {
         switch (event.type) {
-            case "checkout.session.completed":{
+            case "payment_intent.successed ":{
                 
-                const session = event.data.object;
-                
-                console.log('Checkout session completed:', session.id);
+                const paymentIntent = event.data.object;
+                const sessionList = await stripeInstance.checkout.sessions.list({
+                    payment_intent: paymentIntent.id
+                })
+                const session = sessionList.data[0];
+                const { bookingId } = session.metadata;
 
-                const bookingId = session.metadata?.bookingId;
-                console.log("bookingId from metadata:", bookingId);
-                if(!bookingId){
-                    console.error('No bookingId found in session metadata');
-                    break;
-                }
-                const updatedBooking = await Booking.findByIdAndUpdate(
-                    bookingId,
-                    { isPaid: true, paymentLink: ''},
-                    { new: true }
-                );
-                
-                if(updatedBooking){
-                    console.log(`Booking ${bookingId} marked as paid`);
-                }
-                else{
-                    console.error(`Booking not found: ${bookingId}`);
-                }
+                await Booking.findByIdAndUpdate(bookingId, {
+                    isPaid: true,
+                    paymentLink: ""
+                })
+                break;
 
                 //Send Confirmation Email
 
@@ -50,12 +40,12 @@ export const stripeWebhooks = async (request, response)=>{
                     data: {bookingId}
                 })
 
-                break;
+                
 
             }
         
             default:
-                console.log(`Unhandled event type: ${event.type}`);
+                console.log('Unhandled event type:', event.type);
         }
         response.json({ received:true });
     } catch (err) {

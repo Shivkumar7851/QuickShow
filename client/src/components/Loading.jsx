@@ -7,7 +7,7 @@ const Loading = () => {
   const navigate = useNavigate()
 
   
-  useEffect(()=>{
+  useEffect(()=>{ 
     if(nextUrl){
       setTimeout(()=>{
         navigate('/' + nextUrl)

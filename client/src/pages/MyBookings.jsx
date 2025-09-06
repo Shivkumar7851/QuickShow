@@ -20,7 +20,7 @@ const MyBookings = () => {
   const getMyBookings = async () =>{
      try {
       const {data} = await axios.get('/api/user/bookings',{headers: {Authorization: `Bearer ${await getToken()}`}})
-      console.log("Booking API Response:", data)
+      console.log("Booking API Response:", data);
       if(data.success){
         setBookings(data.bookings)
       }
@@ -34,7 +34,7 @@ const MyBookings = () => {
     if(user){
       getMyBookings()
     }
-  },[user])
+  },[user]) 
 
 
 
